@@ -9,7 +9,7 @@ import {
 	toChinaMonth,
 	toChinaDay,
 	getSolarTerm,
-} from "../utils/LunarFunction";
+} from "./utils/LunarFunction";
 
 import {
 	toAstro,
@@ -18,10 +18,10 @@ import {
 	solarDays,
 	solarFirstWeek,
 	toChinaNum,
-} from "../utils/SolarFunction";
+} from "./utils/SolarFunction";
 
-import { RestDay } from "../utils/SetRest";
-import { FestivalDay } from "../utils/SetFestival";
+import { RestDay } from "./utils/SetRest";
+import { FestivalDay } from "./utils/SetFestival";
 
 const solar2lunar = function (y: number, m: number, d: number): object {
 	//未传参获得当天

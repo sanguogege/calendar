@@ -77,7 +77,7 @@ const toGanZhiYear = function (lYear: number): string {
 /**
  * 传入offset偏移量返回干支
  * @param offset 相对甲子的偏移量
- * @return Cn string
+ * @return Cn { string }
  */
 const toGanZhi = function (offset: number): string {
 	return Gan[offset % 10] + Zhi[offset % 12];
