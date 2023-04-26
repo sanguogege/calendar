@@ -1,6 +1,6 @@
 {
     "name": "@sanguogege/calendar",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "keywords": [
         "日历",
         "农历",
@@ -12,6 +12,7 @@
     "type": "module",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
+    "repository": "https://github.com/sanguogege/calendar",
     "files": [
         "dist"
     ],

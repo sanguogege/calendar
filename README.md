@@ -4,17 +4,17 @@
 `npm i @sanguogege/calendar`
 
 ```
-import calendar from "yz-calendar";
+import calendar from "@sanguogege/calendar";
 
 const today  =  calendar.solar2lunar(2021, 3, 21)
 
 ```
 
 
-### 传统页面直接复制/dist/index.js
+### 传统页面直接复制/dist/index.iife.js 或者 /dist/index.umd.cjsindex.iife.js
 
 ```
-<script src="./dist/index.js"></script>
+<script src="./dist/index.iife.js"></script>
 <script>
     const today  =  calendar.solar2lunar(2021, 3, 21)
 </script>
