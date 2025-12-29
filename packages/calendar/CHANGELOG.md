@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- fix:function work
+- fix:function work done
 
 ## 1.3.2
 
