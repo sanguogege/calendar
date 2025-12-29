@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.2.8
+
+### Patch Changes
+
+- bun run build
+
 ## 1.2.7
 
 ### Patch Changes
