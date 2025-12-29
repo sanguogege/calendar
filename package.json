@@ -1,5 +1,5 @@
 {
-    "name": "@sanguogege/calendar",
+    "name": "root",
     "private": true,
     "scripts": {
         "change": "bun changeset",
