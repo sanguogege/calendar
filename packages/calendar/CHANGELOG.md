@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.2.5
+
+### Patch Changes
+
+- change version
+
 ## 1.2.4
 
 ### Patch Changes
