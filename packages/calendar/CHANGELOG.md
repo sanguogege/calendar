@@ -1,35 +1,5 @@
 # @sanguogege/calendar
 
-## 1.2.10
-
-### Patch Changes
-
-- checkData
-
-## 1.2.9
-
-### Patch Changes
-
-- check 1.2.9
-
-## 1.2.8
-
-### Patch Changes
-
-- build:all 1.2.8
-
-## 1.2.8
-
-### Patch Changes
-
-- build:all
-
-## 1.2.8
-
-### Patch Changes
-
-- bun run build
-
 ## 1.2.7
 
 ### Patch Changes
