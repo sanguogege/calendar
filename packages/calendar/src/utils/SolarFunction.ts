@@ -46,7 +46,8 @@ const toAstro = function (m: number, d: number): string {
 	let s: string =
 		"\u9b54\u7faf\u6c34\u74f6\u53cc\u9c7c\u767d\u7f8a\u91d1\u725b\u53cc\u5b50\u5de8\u87f9\u72ee\u5b50\u5904\u5973\u5929\u79e4\u5929\u874e\u5c04\u624b\u9b54\u7faf";
 	let arr: number[] = [20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22];
-	return s.substr(m * 2 - (d < arr[m - 1] ? 2 : 0), 2) + "\u5ea7"; //座
+	const _start = m * 2 - (d < arr[m - 1] ? 2 : 0);
+	return s.slice(_start, _start + 2) + "\u5ea7"; //座
 };
 
 /**
@@ -64,45 +65,45 @@ const getTerm = function (y: number, n: number): number {
 	}
 	let _table: string = TermInfo[y - 1900];
 	let _info: Array<string> = [
-		parseInt("0x" + _table.substr(0, 5)).toString(),
-		parseInt("0x" + _table.substr(5, 5)).toString(),
-		parseInt("0x" + _table.substr(10, 5)).toString(),
-		parseInt("0x" + _table.substr(15, 5)).toString(),
-		parseInt("0x" + _table.substr(20, 5)).toString(),
-		parseInt("0x" + _table.substr(25, 5)).toString(),
+		parseInt("0x" + _table.slice(0, 5)).toString(),
+		parseInt("0x" + _table.slice(5, 10)).toString(),
+		parseInt("0x" + _table.slice(10, 15)).toString(),
+		parseInt("0x" + _table.slice(15, 20)).toString(),
+		parseInt("0x" + _table.slice(20, 25)).toString(),
+		parseInt("0x" + _table.slice(25, 30)).toString(),
 	];
-	var _calday: Array<string> = [
-		_info[0].substr(0, 1),
-		_info[0].substr(1, 2),
-		_info[0].substr(3, 1),
-		_info[0].substr(4, 2),
+	var _day: Array<string> = [
+		_info[0].slice(0, 1),
+		_info[0].slice(1, 3),
+		_info[0].slice(3, 4),
+		_info[0].slice(4, 6),
 
-		_info[1].substr(0, 1),
-		_info[1].substr(1, 2),
-		_info[1].substr(3, 1),
-		_info[1].substr(4, 2),
+		_info[1].slice(0, 1),
+		_info[1].slice(1, 3),
+		_info[1].slice(3, 4),
+		_info[1].slice(4, 6),
 
-		_info[2].substr(0, 1),
-		_info[2].substr(1, 2),
-		_info[2].substr(3, 1),
-		_info[2].substr(4, 2),
+		_info[2].slice(0, 1),
+		_info[2].slice(1, 3),
+		_info[2].slice(3, 4),
+		_info[2].slice(4, 6),
 
-		_info[3].substr(0, 1),
-		_info[3].substr(1, 2),
-		_info[3].substr(3, 1),
-		_info[3].substr(4, 2),
+		_info[3].slice(0, 1),
+		_info[3].slice(1, 3),
+		_info[3].slice(3, 4),
+		_info[3].slice(4, 6),
 
-		_info[4].substr(0, 1),
-		_info[4].substr(1, 2),
-		_info[4].substr(3, 1),
-		_info[4].substr(4, 2),
+		_info[4].slice(0, 1),
+		_info[4].slice(1, 3),
+		_info[4].slice(3, 4),
+		_info[4].slice(4, 6),
 
-		_info[5].substr(0, 1),
-		_info[5].substr(1, 2),
-		_info[5].substr(3, 1),
-		_info[5].substr(4, 2),
+		_info[5].slice(0, 1),
+		_info[5].slice(1, 3),
+		_info[5].slice(3, 4),
+		_info[5].slice(4, 6),
 	];
-	return parseInt(_calday[n - 1]);
+	return parseInt(_day[n - 1]);
 };
 
 /**
