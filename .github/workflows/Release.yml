@@ -30,7 +30,7 @@ jobs:
         uses: changesets/action@v1
         with:
            publish: bun run publish # 请确保这是你package.json里正确的脚本名
-          version: bun run version
+           version: bun run version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
