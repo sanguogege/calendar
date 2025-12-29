@@ -1,6 +1,6 @@
 import Rest from "../data/rest.json";
 
-function check(data: any) {
+const check = (data: any) => {
 	var demo = {
 		2023: {
 			xiu: ["0101"],

@@ -23,6 +23,7 @@
         "test": "vitest"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.29.8",
         "@vitejs/plugin-legacy": "^7.2.1",
         "rollup-plugin-dts": "^6.3.0",
         "terser": "^5.44.1",

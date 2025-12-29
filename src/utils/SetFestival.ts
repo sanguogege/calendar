@@ -1,13 +1,13 @@
 import Festival from "../data/festival.json";
 
-function check(newData: any, old: any) {
+const check =(newData: any, old: any)=> {
 	Object.keys(newData).forEach(function (e: any) {
 		if (Array.isArray(newData[e])) {
 			newData[e].forEach((et: any) => {
 				if (typeof et !== "string") {
 					console.error("节日名称应为String", et);
 				}
-			});
+			}); 
 			if (!old.hasOwnProperty(e)) {
 				old[e] = newData[e];
 			} else {
