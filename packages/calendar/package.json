@@ -7,6 +7,7 @@
         "阳历",
         "calendar"
     ],
+    "license": "MIT",
     "description": "ts版本的日历生成器 LTS",
     "author": "sanguogege",
     "type": "module",
