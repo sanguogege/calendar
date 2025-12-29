@@ -23,5 +23,5 @@
     },
     "include": [
         "packages"
-    ]
+, "vitest.config.ts"    ]
 }

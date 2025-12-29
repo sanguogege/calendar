@@ -1,6 +1,6 @@
 import {lFtv,sFtv} from "../data/festival.json";
 
-const check =(newData: any, old: any)=> {
+const checkData =(newData: any, old: any)=> {
 	Object.keys(newData).forEach(function (e: any) {
 		if (Array.isArray(newData[e])) {
 			newData[e].forEach((et: any) => {
@@ -35,13 +35,13 @@ const FestivalDay = function (m: number, d: number, data: any, type = true) {
 
 	if (type) {
 		if (data.sFtv) {
-			FDays = check(data.sFtv, sFtv);
+			FDays = checkData(data.sFtv, sFtv);
 		} else {
 			FDays = sFtv;
 		}
 	} else {
 		if (data.lFtv) {
-			FDays = check(data.lFtv, lFtv);
+			FDays = checkData(data.lFtv, lFtv);
 		} else {
 			FDays = lFtv;
 		}

@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.2.7
+
+### Patch Changes
+
+- fix: function
+
 ## 1.2.6
 
 ### Patch Changes
