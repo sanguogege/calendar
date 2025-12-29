@@ -31,4 +31,4 @@ jobs:
           version: bun run version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # 2. 这里不需要重复设置 NPM_TOKEN，因为它已在job层级设置
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
