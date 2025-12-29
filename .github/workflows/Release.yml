@@ -33,8 +33,6 @@ jobs:
               id: changesets
               uses: changesets/action@v1
               with:
-                  # 这里的 publish 对应 package.json 里的 scripts
-                  publish: bun run publish
                   createGithubReleases: true
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
