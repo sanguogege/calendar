@@ -2,6 +2,8 @@
     "name": "@sanguogege/calendar",
     "private": true,
     "version": "0.0.0",
+    "license": "MIT",
+    "author": "sanguogege",
     "description": "ts版本的日历生成器 LTS",
     "scripts": {
         "change": "bun changeset",
