@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.2.10
+
+### Patch Changes
+
+- checkData
+
 ## 1.2.9
 
 ### Patch Changes
