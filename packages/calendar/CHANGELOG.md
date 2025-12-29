@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- build:all 1.2.8
+
+## 1.2.8
+
+### Patch Changes
+
 - build:all
 
 ## 1.2.8
