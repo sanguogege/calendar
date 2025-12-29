@@ -1,5 +1,15 @@
 # @sanguogege/calendar
 
+## 1.3.0
+
+### Minor Changes
+
+- fix: code error
+
+### Patch Changes
+
+- c246d62: add
+
 ## 1.2.7
 
 ### Patch Changes
