@@ -16,21 +16,6 @@
         "vitest": "^4.0.16",
       },
     },
-    "packages/calendar": {
-      "name": "@sanguogege/calendar",
-      "version": "1.2.2",
-      "devDependencies": {
-        "@changesets/cli": "^2.29.8",
-        "@vitejs/plugin-legacy": "^7.2.1",
-        "rollup-plugin-dts": "^6.3.0",
-        "terser": "^5.44.1",
-        "typescript": "^5.9.3",
-        "vite": "^7.3.0",
-        "vite-plugin-build": "^0.10.0",
-        "vite-plugin-dts": "^4.5.4",
-        "vitest": "^4.0.16",
-      },
-    },
   },
   "packages": {
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "https://registry.npmmirror.com/@babel/code-frame/-/code-frame-7.27.1.tgz", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
@@ -392,8 +377,6 @@
     "@rushstack/terminal": ["@rushstack/terminal@0.19.5", "https://registry.npmmirror.com/@rushstack/terminal/-/terminal-0.19.5.tgz", { "dependencies": { "@rushstack/node-core-library": "5.19.1", "@rushstack/problem-matcher": "0.1.1", "supports-color": "~8.1.1" }, "peerDependencies": { "@types/node": "*" }, "optionalPeers": ["@types/node"] }, "sha512-6k5tpdB88G0K7QrH/3yfKO84HK9ggftfUZ51p7fePyCE7+RLLHkWZbID9OFWbXuna+eeCFE7AkKnRMHMxNbz7Q=="],
 
     "@rushstack/ts-command-line": ["@rushstack/ts-command-line@5.1.5", "https://registry.npmmirror.com/@rushstack/ts-command-line/-/ts-command-line-5.1.5.tgz", { "dependencies": { "@rushstack/terminal": "0.19.5", "@types/argparse": "1.0.38", "argparse": "~1.0.9", "string-argv": "~0.3.1" } }, "sha512-YmrFTFUdHXblYSa+Xc9OO9FsL/XFcckZy0ycQ6q7VSBsVs5P0uD9vcges5Q9vctGlVdu27w+Ct6IuJ458V0cTQ=="],
-
-    "@sanguogege/calendar": ["@sanguogege/calendar@workspace:packages/calendar"],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "https://registry.npmmirror.com/@standard-schema/spec/-/spec-1.1.0.tgz", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
