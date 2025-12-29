@@ -9,8 +9,7 @@
         "change": "bun changeset",
         "version": "bun changeset version",
         "status": "bun changeset status",
-        "build": "bun build:all",
-        "build:all": "bun --filter \"./packages/*\" run build",
+        "build": "bun run -r build",
         "publish": "changeset publish"
     },
     "devDependencies": {
