@@ -9,9 +9,8 @@
         "change": "bun changeset",
         "version": "bun changeset version",
         "status": "bun changeset status",
-        "change:patch": "bun changeset --empty --type patch",
-        "change:minor": "bun changeset --empty --type minor",
-        "change:major": "bun changeset --empty --type major",
+        "build": "bun build:all",
+        "build:all": "bun --filter \"./packages/*\" run build",
         "publish": "changeset publish"
     },
     "devDependencies": {
