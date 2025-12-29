@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.3.1
+
+### Patch Changes
+
+- 0460657: 1.3.1
+- fix: FDays function
 
 ## 1.3.0
 
