@@ -9,8 +9,8 @@
         "change": "bun changeset",
         "version": "bun changeset version",
         "status": "bun changeset status",
-        "build": "bun run -r build",
-        "publish": "changeset publish"
+        "build": "bun run --filter \"./packages/*\" build", 
+        "publish:packages": "bun run build && bun changeset publish" 
     },
     "devDependencies": {
         "@changesets/cli": "^2.29.8",
