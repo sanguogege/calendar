@@ -23,7 +23,7 @@ import {
 import { RestDay } from "./utils/SetRest";
 import { FestivalDay } from "./utils/SetFestival";
 
-const solar2lunar = function (y: number, m: number, d: number): object {
+const solarToLunar = function (y: number, m: number, d: number): object {
 	//未传参获得当天
 	let objDate: Date;
 	if (!y) {
@@ -147,12 +147,12 @@ const solar2lunar = function (y: number, m: number, d: number): object {
 	const NAll = FestivalDay(month, day, calendar.setFestival, false);
 	let Gljr = GAll.FDays;
 	let Nljr = NAll.FDays;
-	calendar.Festival = {
+	calendar.festival = {
 		sFtv: GAll.Festival,
 		lFtv: NAll.Festival,
 	};
 	let XiuBox = RestDay(y, m, d, calendar.setRest);
-	calendar.Rest = XiuBox.newRest;
+	calendar.rest = XiuBox.newRest;
 	// 用于设置上个月
 	return {
 		Xiu: XiuBox.Xiu,
@@ -181,7 +181,7 @@ const solar2lunar = function (y: number, m: number, d: number): object {
 	};
 };
 
-const lunar2solar = function (
+const lunarToSolar = function (
 	y: number,
 	m: number,
 	d: number,
@@ -236,26 +236,26 @@ const lunar2solar = function (
 	let cM: number = calObj.getUTCMonth() + 1;
 	let cD: number = calObj.getUTCDate();
 
-	return solar2lunar(cY, cM, cD);
+	return solarToLunar(cY, cM, cD);
 };
 
 const calendar = {
-	setRest: {},
-	Rest: {},
-	setFestival: {},
-	Festival: {},
-	lYearDays,
-	leapMonth,
-	leapDays,
-	lMonthDays,
-	toChinaMonth,
-	toChinaDay,
-	solarDays,
-	solarFirstWeek,
-	toAstro,
-	getAnimal,
-	solar2lunar,
-	lunar2solar,
+    setRest: {},
+    rest: {},
+    setFestival: {},
+    festival: {},
+    lYearDays,
+    leapMonth,
+    leapDays,
+    lMonthDays,
+    toChinaMonth,
+    toChinaDay,
+    solarDays,
+    solarFirstWeek,
+    toAstro,
+    getAnimal,
+    solarToLunar,
+    lunarToSolar,
 };
 
 export default calendar;

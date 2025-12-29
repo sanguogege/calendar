@@ -1,4 +1,4 @@
-import Festival from "../data/festival.json";
+import {lFtv,sFtv} from "../data/festival.json";
 
 const check =(newData: any, old: any)=> {
 	Object.keys(newData).forEach(function (e: any) {
@@ -35,15 +35,15 @@ const FestivalDay = function (m: number, d: number, data: any, type = true) {
 
 	if (type) {
 		if (data.sFtv) {
-			FDays = check(data.sFtv, Festival.sFtv);
+			FDays = check(data.sFtv, sFtv);
 		} else {
-			FDays = Festival.sFtv;
+			FDays = sFtv;
 		}
 	} else {
 		if (data.lFtv) {
-			FDays = check(data.lFtv, Festival.lFtv);
+			FDays = check(data.lFtv, lFtv);
 		} else {
-			FDays = Festival.lFtv;
+			FDays = lFtv;
 		}
 	}
 	if (FDays[day]) {
