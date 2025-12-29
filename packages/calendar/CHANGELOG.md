@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- change version
+- change some version
 
 ## 1.2.5
 
