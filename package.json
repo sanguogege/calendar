@@ -9,7 +9,8 @@
         "change:patch": "bun changeset --empty --type patch",
         "change:minor": "bun changeset --empty --type minor",
         "change:major": "bun changeset --empty --type major",
-        "publish": "bun publish --all"
+        "publish": "bun run publish:packages",
+        "publish:packages": "bun changeset publish"
     },
     "devDependencies": {
         "@changesets/cli": "^2.29.8",
