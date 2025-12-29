@@ -13,7 +13,11 @@
     "type": "module",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
-    "repository": "https://github.com/sanguogege/calendar",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sanguogege/calendar",
+        "directory": "packages/calendar"
+    },
     "files": [
         "dist"
     ],
