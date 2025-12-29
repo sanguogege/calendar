@@ -1,6 +1,6 @@
 import Rest from "../data/rest.json";
 
-const check = (data: any) => {
+const checkData = (data: any) => {
     var demo = {
         2023: {
             xiu: ["0101"],
@@ -29,7 +29,7 @@ const check = (data: any) => {
 };
 
 const RestDay = function (y: number, m: number, d: number, data?: any) {
-	var newRest = check(data);
+	var newRest = checkData(data);
 	const day =
 		(m < 10 ? "0" + m : m.toString()) + (d < 10 ? "0" + d : d.toString());
 	if (newRest[y]) {
