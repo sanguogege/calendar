@@ -27,7 +27,7 @@ jobs:
               run: bun install
 
             - name: Build packages
-              run: bun run build 
+              run: bun run -r build
 
             - name: Create Release PR or Publish
               id: changesets
