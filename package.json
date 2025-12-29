@@ -1,22 +1,6 @@
 {
     "name": "@sanguogege/calendar",
-    "version": "1.2.2",
-    "keywords": [
-        "日历",
-        "农历",
-        "阳历",
-        "calendar"
-    ],
     "private": true,
-    "description": "ts版本的日历生成器 LTS",
-    "author": "sanguogege",
-    "type": "module",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "repository": "https://github.com/sanguogege/calendar",
-    "files": [
-        "dist"
-    ],
     "scripts": {
         "change": "bun changeset",
         "version": "bun changeset version",
