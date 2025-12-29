@@ -18,11 +18,12 @@
     ],
     "scripts": {
         "change": "bun changeset",
+        "version": "bun changeset version",
+        "status": "bun changeset status",
         "change:patch": "bun changeset --empty --type patch",
         "change:minor": "bun changeset --empty --type minor",
         "change:major": "bun changeset --empty --type major",
-        "version": "bun changeset version",
-        "status": "bun changeset status"
+        "publish": "bun publish -r"
     },
     "devDependencies": {
         "@changesets/cli": "^2.29.8",
