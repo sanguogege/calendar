@@ -10,7 +10,7 @@ node_modules
 test
 dist-ssr
 *.local
-dist
+dist/
 
 # Editor directories and files
 .vscode/*

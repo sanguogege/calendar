@@ -1,4 +1,4 @@
-import Fastival from "../data/fastival.json";
+import Festival from "../data/festival.json";
 
 function check(newData: any, old: any) {
 	Object.keys(newData).forEach(function (e: any) {
@@ -35,15 +35,15 @@ const FestivalDay = function (m: number, d: number, data: any, type = true) {
 
 	if (type) {
 		if (data.sFtv) {
-			FDays = check(data.sFtv, Fastival.sFtv);
+			FDays = check(data.sFtv, Festival.sFtv);
 		} else {
-			FDays = Fastival.sFtv;
+			FDays = Festival.sFtv;
 		}
 	} else {
 		if (data.lFtv) {
-			FDays = check(data.lFtv, Fastival.lFtv);
+			FDays = check(data.lFtv, Festival.lFtv);
 		} else {
-			FDays = Fastival.lFtv;
+			FDays = Festival.lFtv;
 		}
 	}
 	if (FDays[day]) {
