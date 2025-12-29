@@ -1,3 +1,9 @@
+
+[![NPM Version](https://img.shields.io/npm/v/@sanguogege/calendar.svg?style=for-the-badge)](https://www.npmjs.com/package/solid-js)
+[![](https://img.shields.io/npm/dm/@sanguogege/calendar.svg?style=for-the-badge)](https://www.npmjs.com/package/@sanguogege/calendar)
+
+
+
 <p align="center"> <b>万年历生成器</b> </p>
 
 ### web构建工具使用:
