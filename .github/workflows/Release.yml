@@ -2,53 +2,28 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*" # 识别推送 v 开头的 tag 时触发
+    branches:
+      - master
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Get version from tag
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: npm install
+        run: bun install
 
-      - name: Build
-        run: npm run build
-
-      # 生成需要上传的 release 文件
-      - name: Rename and Compress dist
-        run: |
-          mv dist timeline-todolist-v${{ steps.get_version.outputs.VERSION }}
-          tar -czf timeline-todolist-v${{ steps.get_version.outputs.VERSION }}.tar.gz timeline-todolist-v${{ steps.get_version.outputs.VERSION }}
-          zip -r timeline-todolist-v${{ steps.get_version.outputs.VERSION }}.zip timeline-todolist-v${{ steps.get_version.outputs.VERSION }}
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Create release PR or publish
+        uses: changesets/action@v1
         with:
-          # token 尤其需要注意，否则会出现 GitHub release failed with status: 403 undefined
-          # token 的生成可以详见 tips
-          token: ${{ secrets.GITHUBTOKEN }}
-          name: "Version ${{ steps.get_version.outputs.VERSION }} 🚀"
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-          # release 中的信息，一般为 changelog
-          body_path: changelog/v${{ steps.get_version.outputs.VERSION }}.md
-          # 你上传的 release 文件路径
-          files: |
-            timeline-todolist-v${{ steps.get_version.outputs.VERSION }}.tar.gz
-            timeline-todolist-v${{ steps.get_version.outputs.VERSION }}.zip
-
+          publish: bun run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

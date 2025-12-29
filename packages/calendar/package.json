@@ -1,6 +1,6 @@
 {
     "name": "@sanguogege/calendar",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "keywords": [
         "日历",
         "农历",
@@ -21,8 +21,7 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "test": "vitest",
-        "version": "bun changeset version",
-        "release": "bun run build && bun publish -r"
+        "test": "vitest"
+        
     }
 }
