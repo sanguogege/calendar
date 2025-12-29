@@ -6,6 +6,10 @@ on:
             - master
         paths: # 注意：这里是复数 paths
             - "packages/**/package.json"
+permissions:
+    contents: write
+    pull-requests: write
+    id-token: write
 
 jobs:
     release:
