@@ -8,7 +8,6 @@ const checkData = (data: any) => {
         },
     };
     Object.keys(data).forEach(function (e: any) {
-        console.log(data);
         if (typeof e == "string") {
             if (!parseInt(e)) {
                 console.error(

@@ -34,17 +34,10 @@ const FestivalDay = function (m: number, d: number, data: any, type = true) {
 	let FDays: any = {};
 
 	if (type) {
-		if (data.sFtv) {
-			FDays = checkData(data.sFtv, sFtv);
-		} else {
-			FDays = sFtv;
-		}
+		FDays = data.sFtv ? checkData(data.sFtv, sFtv) : sFtv;
+		
 	} else {
-		if (data.lFtv) {
-			FDays = checkData(data.lFtv, lFtv);
-		} else {
-			FDays = lFtv;
-		}
+		FDays = data.lFtv? checkData(data.lFtv, lFtv) : lFtv;
 	}
 	if (FDays[day]) {
 		return {
