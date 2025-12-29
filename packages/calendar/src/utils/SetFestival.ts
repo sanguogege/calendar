@@ -1,31 +1,31 @@
 import {lFtv,sFtv} from "../data/festival.json";
 
-const checkData =(newData: any, old: any)=> {
-	Object.keys(newData).forEach(function (e: any) {
-		if (Array.isArray(newData[e])) {
-			newData[e].forEach((et: any) => {
-				if (typeof et !== "string") {
-					console.error("节日名称应为String", et);
-				}
-			}); 
-			if (!old.hasOwnProperty(e)) {
-				old[e] = newData[e];
-			} else {
-				const newFes = old[e].concat(newData[e]);
-				old[e] = newFes.filter(function (
-					item: any,
-					index: any,
-					array: any
-				) {
-					return array.indexOf(item) === index;
-				});
-			}
-		} else {
-			console.error("节日汇总格式是应为数组", newData);
-		}
-	});
-	return old;
-}
+const check = (newData: any, old: any) => {
+    Object.keys(newData).forEach(function (e: any) {
+        if (Array.isArray(newData[e])) {
+            newData[e].forEach((et: any) => {
+                if (typeof et !== "string") {
+                    console.error("节日名称应为String", et);
+                }
+            });
+            if (!old.hasOwnProperty(e)) {
+                old[e] = newData[e];
+            } else {
+                const newFes = old[e].concat(newData[e]);
+                old[e] = newFes.filter(function (
+                    item: any,
+                    index: any,
+                    array: any
+                ) {
+                    return array.indexOf(item) === index;
+                });
+            }
+        } else {
+            console.error("节日汇总格式是应为数组", newData);
+        }
+    });
+    return old;
+};
 
 const FestivalDay = function (m: number, d: number, data: any, type = true) {
 	const day =
@@ -35,13 +35,13 @@ const FestivalDay = function (m: number, d: number, data: any, type = true) {
 
 	if (type) {
 		if (data.sFtv) {
-			FDays = checkData(data.sFtv, sFtv);
+			FDays = check(data.sFtv, sFtv);
 		} else {
 			FDays = sFtv;
 		}
 	} else {
 		if (data.lFtv) {
-			FDays = checkData(data.lFtv, lFtv);
+			FDays = check(data.lFtv, lFtv);
 		} else {
 			FDays = lFtv;
 		}
