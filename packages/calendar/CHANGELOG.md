@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- change some version
+- fix:substr to slice
 
 ## 1.2.5
 
