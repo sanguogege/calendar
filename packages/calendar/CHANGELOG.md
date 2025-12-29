@@ -1,16 +1,10 @@
 # @sanguogege/calendar
 
-## 1.3.4
-
-### Patch Changes
-
-- fix: i dont known
-
 ## 1.3.3
 
 ### Patch Changes
 
-- fix:no dist
+- fix:function work
 
 ## 1.3.2
 
