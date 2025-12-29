@@ -24,16 +24,5 @@
         "test": "vitest",
         "version": "bun changeset version",
         "release": "bun run build && bun publish -r"
-    },
-    "devDependencies": {
-        "@changesets/cli": "workspace:*",
-        "@vitejs/plugin-legacy": "workspace:*",
-        "rollup-plugin-dts": "workspace:*",
-        "terser": "workspace:*",
-        "typescript": "workspace:*",
-        "vite": "workspace:*",
-        "vite-plugin-build": "workspace:*",
-        "vite-plugin-dts": "workspace:*",
-        "vitest": "workspace:*"
     }
 }
