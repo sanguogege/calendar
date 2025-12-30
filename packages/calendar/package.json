@@ -19,7 +19,7 @@
     "types": "./dist/index.d.ts",
     "repository": {
         "type": "git",
-        "url": "https://github.com/sanguogege/calendar.git",
+        "url": "https://github.com/sanguogege/calendar",
         "directory": "packages/calendar"
     },
     "files": [
