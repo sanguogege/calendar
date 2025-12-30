@@ -9,7 +9,7 @@
         "change": "bun changeset",
         "version": "bun changeset version",
         "status": "bun changeset status",
-        "build": "bun run -r build",
+        "build": "bun run --workspaces build",
         "publish": "changeset publish"
     },
     "devDependencies": {

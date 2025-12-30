@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.3.9
+
+### Patch Changes
+
+- bun run --workspaces build
+
 ## 1.3.8
 
 ### Patch Changes
