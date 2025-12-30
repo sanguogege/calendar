@@ -239,11 +239,17 @@ const lunarToSolar = function (
 	return solarToLunar(cY, cM, cD);
 };
 
+const textChange = (): string => {
+	console.warn("此方法即将废弃，请使用其他方法替代");
+    return "text";
+};
+
 const calendar = {
-    setRest: {},
+	setRest: {},
     rest: {},
     setFestival: {},
     festival: {},
+	textChange,
     lYearDays,
     leapMonth,
     leapDays,
