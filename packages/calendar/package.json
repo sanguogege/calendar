@@ -9,8 +9,7 @@
     ],
     "publishConfig": {
         "access": "public",
-        "registry": "https://registry.npmjs.org",
-        "directory": "packages/calendar"
+        "registry": "https://registry.npmjs.org"
     },
     "license": "MIT",
     "description": "ts版本的日历生成器 LTS",
