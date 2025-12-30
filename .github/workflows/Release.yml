@@ -4,8 +4,11 @@ on:
     push:
         branches:
             - master
-        paths: # 注意：这里是复数 paths
-            - "packages/**/package.json"
+        # 建议扩大监控范围，否则你只改代码不改 package.json 时不会触发
+        paths: 
+            - "packages/**"
+            - ".changeset/*.md"
+
 permissions:
     contents: write
     pull-requests: write
@@ -33,11 +36,12 @@ jobs:
               id: changesets
               uses: changesets/action@v1
               with:
-                  run: bun run publish
+                  # 修正点 1: 必须使用 publish 关键字
+                  publish: bun run publish 
+                  # 修正点 2: 确认你的脚本名是 version
+                  version: bun run version
                   createGithubReleases: true
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  # Changesets 默认查找 NPM_TOKEN 环境变量，确保 Secrets 正确
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-                  # 如果你使用 Bun 官方源，有时也需要设置 NODE_AUTH_TOKEN
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -240,7 +240,8 @@ const lunarToSolar = function (
 };
 
 const textChange = (): string => {
-	console.warn("此方法即将废弃，请使用其他方法替代");
+	const thistest = getAnimal(2024);
+	console.warn("此方法即将废弃，请使用其他方法替代", thistest);
     return "text";
 };
 
