@@ -1,6 +1,6 @@
 {
     "name": "@sanguogege/calendar",
-    "version": "1.3.7",
+    "version": "1.3.8",
     "keywords": [
         "日历",
         "农历",
@@ -10,7 +10,7 @@
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org",
-         "directory": "packages/calendar"
+        "directory": "packages/calendar"
     },
     "license": "MIT",
     "description": "ts版本的日历生成器 LTS",
