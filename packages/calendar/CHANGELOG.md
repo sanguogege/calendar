@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.3.4
+
+### Patch Changes
+
+- change some type and clean
+
 ## 1.3.3
 
 ### Patch Changes
