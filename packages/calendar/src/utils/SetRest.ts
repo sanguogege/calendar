@@ -24,7 +24,8 @@ const checkData = (data: any) => {
             console.error("请检查输入的调休的key格式是否正确:ban", demo);
         }
     });
-    return Object.assign({}, Rest, data);
+    // return Object.assign({}, Rest, data);
+    return { ...Rest, ...data };
 };
 
 const RestDay = function (y: number, m: number, d: number, data?: any) {

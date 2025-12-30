@@ -1,5 +1,11 @@
 # @sanguogege/calendar
 
+## 1.3.5
+
+### Patch Changes
+
+- fix: function better
+
 ## 1.3.4
 
 ### Patch Changes
