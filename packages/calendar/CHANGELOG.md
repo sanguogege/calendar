@@ -1,5 +1,15 @@
 # @sanguogege/calendar
 
+## 1.3.10
+
+### Patch Changes
+
+- fix: del useless function
+
+- this will the last version in sometime later.
+
+- a good project to test 
+
 ## 1.3.9
 
 ### Patch Changes
