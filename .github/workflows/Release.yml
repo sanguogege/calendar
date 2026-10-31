@@ -1,21 +1,23 @@
 name: Release
 
+# 版本号由人工修改（packages/calendar/package.json 的 version）。
+# 这里只在 package.json 变动时触发，并对比 npm 上已发布的版本：
+# 版本没变就跳过，只有版本不一样才真正构建并发布。
 on:
   push:
     branches:
       - master
     paths:
-      - "packages/**"
-      - ".changeset/**"
-      - "package.json"
-      - "bun.lock"
-      - ".github/workflows/Release.yml"
+      - "packages/calendar/package.json"
   workflow_dispatch:
 
 permissions:
   contents: write
-  pull-requests: write
   id-token: write
+
+concurrency:
+  group: release-calendar
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -31,22 +33,61 @@ jobs:
         with:
           bun-version: 1.4.4
 
-      # 锁文件由 bun 维护；等下一次 bun install 提交后可以收紧成 --frozen-lockfile
+      - name: Detect version change
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          current=$(node -p "require('./packages/calendar/package.json').version")
+          published=$(npm view "@sanguogege/calendar" version 2>/dev/null | tail -n 1 || true)
+
+          echo "package.json: ${current}"
+          echo "npm:          ${published:-<未发布>}"
+
+          {
+            echo "version=${current}"
+            if [ "${published}" = "${current}" ]; then
+              echo "changed=false"
+            else
+              echo "changed=true"
+            fi
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Skip publish (version unchanged)
+        if: steps.version.outputs.changed != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: echo "::notice::版本 ${VERSION} 已发布到 npm，跳过。"
+
       - name: Install dependencies
+        if: steps.version.outputs.changed == 'true'
         run: bun install
 
       # 等价于 vp check && vp run -r test && vp run -r build
       - name: Check, test and build
+        if: steps.version.outputs.changed == 'true'
         run: bun run ready
 
-      - name: Create Release PR or Publish
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: bun run version
-          publish: bunx changeset publish
-          createGithubReleases: true
+      - name: Publish to npm
+        if: steps.version.outputs.changed == 'true'
+        working-directory: packages/calendar
+        run: npm publish --access public
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Tag and create GitHub release
+        if: steps.version.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          tag="v${VERSION}"
+          if git rev-parse --verify --quiet "refs/tags/${tag}" > /dev/null; then
+            echo "tag ${tag} 已存在，跳过创建"
+          else
+            git tag "${tag}"
+            git push origin "${tag}"
+            gh release create "${tag}" --title "${tag}" --generate-notes
+          fi
