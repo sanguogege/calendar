@@ -1,29 +1,40 @@
 {
-    "name": "@sanguogege/calendar",
-    "private": true,
-    "version": "0.0.0",
-    "license": "MIT",
-    "author": "sanguogege",
-    "description": "ts版本的日历生成器 LTS",
-    "scripts": {
-        "change": "bun changeset",
-        "version": "bun changeset version",
-        "status": "bun changeset status",
-        "build": "bun run --workspaces build",
-        "publish": "changeset publish"
-    },
-    "devDependencies": {
-        "@changesets/cli": "^2.29.8",
-        "@vitejs/plugin-legacy": "^7.2.1",
-        "rollup-plugin-dts": "^6.3.0",
-        "terser": "^5.44.1",
-        "typescript": "^5.9.3",
-        "vite": "^7.3.0",
-        "vite-plugin-build": "^0.10.0",
-        "vite-plugin-dts": "^4.5.4",
-        "vitest": "^4.0.16"
-    },
-    "workspaces": [
-        "packages/*"
-    ]
+  "name": "calendar",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "tools/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "ready": "vp check && vp run -r test && vp run -r build",
+    "dev": "vp run website#dev",
+    "prepare": "vp config"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.3",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "overrides": {
+    "vite": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.4",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "catalog": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+    "vite-plus": "1.4.0",
+    "typescript": "^7.0.2",
+    "@types/node": "^26.6.5"
+  }
 }
