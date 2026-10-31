@@ -15,6 +15,8 @@ export default defineConfig({
     globals: false,
     setupFiles: ["./vitest-setup.ts"],
     isolate: false,
+    // 文档站暂时没有测试文件，避免 `vp test` 因 "No test files found" 退出 1
+    passWithNoTests: true,
   },
   build: {
     target: "esnext",

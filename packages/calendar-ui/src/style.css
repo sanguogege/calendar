@@ -1,0 +1,151 @@
+/* calendar-ui 的默认皮肤：所有颜色/尺寸都走 CSS 变量，外部改 :root 或 .cui 即可换主题 */
+.cui {
+  --cui-bg: #ffffff;
+  --cui-fg: #1f2328;
+  --cui-muted: #8b949e;
+  --cui-border: #e6e8eb;
+  --cui-accent: #2563eb;
+  --cui-accent-fg: #ffffff;
+  --cui-rest: #e5484d;
+  --cui-hover: #f3f4f6;
+  --cui-radius: 10px;
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  padding: 12px;
+  border: 1px solid var(--cui-border);
+  border-radius: var(--cui-radius);
+  background: var(--cui-bg);
+  color: var(--cui-fg);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.cui *,
+.cui *::before,
+.cui *::after {
+  box-sizing: border-box;
+}
+
+/* 头部：上个月 / 年月标题 / 下个月 */
+.cui__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 2px 10px;
+}
+
+.cui__title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.cui__nav {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--cui-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cui-fg);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cui__nav:hover {
+  background: var(--cui-hover);
+}
+
+.cui__nav:focus-visible,
+.cui__day:focus-visible {
+  outline: 2px solid var(--cui-accent);
+  outline-offset: 1px;
+}
+
+/* 星期表头 */
+.cui__weekdays,
+.cui__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.cui__weekday {
+  padding: 4px 0;
+  color: var(--cui-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* 日期格 */
+.cui__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 46px;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cui__day:hover {
+  background: var(--cui-hover);
+}
+
+.cui__day-num {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.cui__day-sub {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--cui-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 状态 */
+.cui__day.is-outside {
+  opacity: 0.35;
+}
+
+.cui__day.is-rest .cui__day-sub {
+  color: var(--cui-rest);
+}
+
+.cui__day.is-today {
+  border-color: var(--cui-accent);
+}
+
+.cui__day.is-selected {
+  background: var(--cui-accent);
+  color: var(--cui-accent-fg);
+}
+
+.cui__day.is-selected .cui__day-sub {
+  color: currentColor;
+  opacity: 0.85;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cui {
+    --cui-bg: #161b22;
+    --cui-fg: #e6edf3;
+    --cui-muted: #8b949e;
+    --cui-border: #30363d;
+    --cui-hover: #21262d;
+    --cui-rest: #ff7b72;
+  }
+}

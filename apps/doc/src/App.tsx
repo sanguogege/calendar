@@ -12,6 +12,7 @@ export default function App() {
           <nav>
             <a href={paths()}>Home</a>
             <a href={paths.users()}>Users</a>
+            <a href={paths.calendar()}>Calendar</a>
           </nav>
           <Loading fallback={<main>Loading…</main>}>{props.children}</Loading>
         </>

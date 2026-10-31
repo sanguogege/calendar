@@ -12,7 +12,7 @@
     "change": "bun changeset",
     "version": "bun changeset version",
     "ready": "vp check && vp run -r test && vp run -r build",
-    "dev": "vp run website#dev",
+    "dev": "vp run --fail-if-no-match doc#dev",
     "prepare": "vp config"
   },
   "devDependencies": {

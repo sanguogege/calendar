@@ -1,17 +1,18 @@
 {
-  "name": "example-basic",
+  "name": "doc",
   "version": "0.0.0",
   "description": "",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "test": "vitest",
-    "lint": "oxlint src"
+    "dev": "vp dev",
+    "build": "vp build",
+    "serve": "vp preview",
+    "test": "vp test",
+    "lint": "vp lint"
   },
   "dependencies": {
+    "@sanguogege/calendar-ui": "workspace:*",
     "@solidjs/meta": "^1.0.0-next.2",
     "@solidjs/router": "^2.0.0-next.43",
     "@solidjs/web": "^2.0.0-rc.20",
