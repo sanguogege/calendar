@@ -11,6 +11,8 @@ export default defineConfig({
     dts: {
       generator: "tsgo",
     },
-    exports: true,
+    // 保持 1.x 的发布形态：ESM / CJS 给打包工具，IIFE / UMD 给 <script> 直引
+    format: ["esm", "cjs", "iife", "umd"],
+    globalName: "calendar",
   },
 });

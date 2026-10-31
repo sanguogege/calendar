@@ -1,0 +1,129 @@
+import { Animals, nStr1, SolarMonth, TermInfo } from "../data/Calendar";
+import { assertInteger, failRange } from "./Assert";
+
+/** 公历年份下限，只为挡住明显错误的入参 */
+const SOLAR_YEAR_MIN = 1;
+const SOLAR_YEAR_MAX = 9999;
+
+/**
+ * 返回公历 y 年 m 月的天数（会自动处理闰年）
+ * @param y 公历年
+ * @param m 公历月（1-12）
+ * @return 28-31
+ */
+const solarDays = function (y: number, m: number): number {
+  assertInteger("solarDays(year)", y, SOLAR_YEAR_MIN, SOLAR_YEAR_MAX);
+  assertInteger("solarDays(month)", m, 1, 12);
+  if (m === 2) {
+    return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 29 : 28;
+  }
+  return SolarMonth[m - 1];
+};
+
+/**
+ * 返回公历 y 年 m 月 1 日是星期几
+ * @param y 公历年
+ * @param m 公历月（1-12）
+ * @return 0-6，0 为周日
+ */
+const solarFirstWeek = function (y: number, m: number): number {
+  assertInteger("solarFirstWeek(year)", y, SOLAR_YEAR_MIN, SOLAR_YEAR_MAX);
+  assertInteger("solarFirstWeek(month)", m, 1, 12);
+  return new Date(Date.UTC(y, m - 1, 1)).getUTCDay();
+};
+
+/**
+ * 返回公历 y 年 m 月第 nth 个星期 weekday 是几号
+ * @param y 公历年
+ * @param m 公历月（1-12）
+ * @param weekday 0-6，0 为周日
+ * @param nth 第几个，从 1 开始
+ * @example nthWeekdayOfMonth(2026, 5, 0, 2) // 10，2026 年母亲节是 5 月 10 日
+ */
+const nthWeekdayOfMonth = function (y: number, m: number, weekday: number, nth: number): number {
+  assertInteger("nthWeekdayOfMonth(weekday)", weekday, 0, 6);
+  assertInteger("nthWeekdayOfMonth(nth)", nth, 1, 5);
+  const firstWeekday = solarFirstWeek(y, m);
+  const day = 1 + ((weekday - firstWeekday + 7) % 7) + (nth - 1) * 7;
+  if (day > solarDays(y, m)) {
+    failRange("nthWeekdayOfMonth", `${y} 年 ${m} 月没有第 ${nth} 个星期${weekday}，超出当月天数`);
+  }
+  return day;
+};
+
+/**
+ * 星座名称，每个星座占两个字符，末尾补一个摩羯座用于 12 月下旬切片
+ */
+const ASTRO_NAMES =
+  "\u6469\u7faf\u6c34\u74f6\u53cc\u9c7c\u767d\u7f8a\u91d1\u725b\u53cc\u5b50\u5de8\u87f9\u72ee\u5b50\u5904\u5973\u5929\u79e4\u5929\u874e\u5c04\u624b\u6469\u7faf";
+
+/** 每个月切换星座的日期，当天大于等于该值即属于后一个星座 */
+const ASTRO_CUSP = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 23, 22];
+
+/**
+ * 公历月、日判断所属星座
+ * @param m 公历月（1-12）
+ * @param d 公历日
+ * @example toAstro(4, 19) // "白羊座"
+ */
+const toAstro = function (m: number, d: number): string {
+  assertInteger("toAstro(month)", m, 1, 12);
+  assertInteger("toAstro(day)", d, 1, 31);
+  const start = m * 2 - (d < ASTRO_CUSP[m - 1] ? 2 : 0);
+  return ASTRO_NAMES.slice(start, start + 2) + "\u5ea7";
+};
+
+/**
+ * 传入公历年获得该年第 n 个节气所在公历月的日期
+ * @param y 公历年（1900-2100）
+ * @param n 第几个节气（1-24），1 为小寒
+ * @return 日期数字
+ * @example getTerm(1987, 3) // 4，1987 年 2 月 4 日立春
+ */
+const getTerm = function (y: number, n: number): number {
+  assertInteger("getTerm(year)", y, 1900, 2100);
+  assertInteger("getTerm(n)", n, 1, 24);
+  const table = TermInfo[y - 1900];
+  if (typeof table !== "string" || table.length < 30) {
+    failRange("getTerm(year)", `缺少 ${y} 年的节气数据`);
+  }
+  const info: string[] = [
+    parseInt("0x" + table.slice(0, 5), 16).toString(),
+    parseInt("0x" + table.slice(5, 10), 16).toString(),
+    parseInt("0x" + table.slice(10, 15), 16).toString(),
+    parseInt("0x" + table.slice(15, 20), 16).toString(),
+    parseInt("0x" + table.slice(20, 25), 16).toString(),
+    parseInt("0x" + table.slice(25, 30), 16).toString(),
+  ];
+  const days: string[] = [];
+  info.forEach(function (chunk: string) {
+    days.push(chunk.slice(0, 1), chunk.slice(1, 3), chunk.slice(3, 4), chunk.slice(4, 6));
+  });
+  const day = parseInt(days[n - 1], 10);
+  if (!Number.isInteger(day)) {
+    failRange("getTerm", `${y} 年第 ${n} 个节气解析失败`);
+  }
+  return day;
+};
+
+/**
+ * 年份转生肖，以农历年为准
+ * @param y 年份
+ * @example getAnimal(1987) // "兔"
+ */
+const getAnimal = function (y: number): string {
+  assertInteger("getAnimal(year)", y, SOLAR_YEAR_MIN, SOLAR_YEAR_MAX);
+  return Animals[(((y - 4) % 12) + 12) % 12];
+};
+
+/**
+ * 数字转中文，0-10
+ * @param num 0-10
+ * @example toChinaNum(3) // "三"
+ */
+const toChinaNum = function (num: number): string {
+  assertInteger("toChinaNum(num)", num, 0, 10);
+  return nStr1[num];
+};
+
+export { solarDays, toChinaNum, solarFirstWeek, nthWeekdayOfMonth, toAstro, getTerm, getAnimal };

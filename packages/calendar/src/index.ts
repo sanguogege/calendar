@@ -1,3 +1,313 @@
-export function fn() {
-  return "Hello, Vite+!";
-}
+import {
+  lYearDays,
+  leapMonth,
+  leapDays,
+  lMonthDays,
+  toGanZhiYear,
+  toGanZhi,
+  toHourGanZhi,
+  toChinaMonth,
+  toChinaDay,
+  getSolarTerm,
+} from "./utils/LunarFunction";
+
+import {
+  toAstro,
+  getTerm,
+  getAnimal,
+  solarDays,
+  solarFirstWeek,
+  toChinaNum,
+  nthWeekdayOfMonth,
+} from "./utils/SolarFunction";
+
+import { assertInteger, failRange } from "./utils/Assert";
+import { festivalList } from "./utils/SetFestival";
+import { restOf } from "./utils/SetRest";
+import { getResolvedConfig, setHolidays, resetHolidays, getHolidays } from "./config";
+import type { LunarResult } from "./types";
+
+export type {
+  LunarResult,
+  FestivalMap,
+  FestivalConfig,
+  RestEntry,
+  RestConfig,
+  HolidayConfig,
+  HolidaySnapshot,
+  SetHolidayOptions,
+} from "./types";
+
+/** 支持的公历 / 农历年份范围 */
+const MIN_YEAR = 1900;
+const MAX_YEAR = 2100;
+const DAY_MS = 86400000;
+/** 农历数据起点：1900-01-31，即农历 1900 年正月初一 */
+const MIN_SOLAR_UTC = Date.UTC(MIN_YEAR, 0, 31);
+/** 支持的最后一个公历日 */
+const MAX_SOLAR_UTC = Date.UTC(MAX_YEAR, 11, 31);
+
+/** 把公历年月日校验成合法的、在支持范围内的日期 */
+const validateSolar = function (
+  y: unknown,
+  m: unknown,
+  d: unknown,
+): { year: number; month: number; day: number } {
+  const year = assertInteger("solarToLunar(year)", y, MIN_YEAR, MAX_YEAR);
+  const month = assertInteger("solarToLunar(month)", m, 1, 12);
+  const day = assertInteger("solarToLunar(day)", d, 1, solarDays(year, month));
+  const utc = Date.UTC(year, month - 1, day);
+  if (utc < MIN_SOLAR_UTC) {
+    failRange("solarToLunar", `${year}-${month}-${day} 早于 1900-01-31，超出农历数据范围`);
+  }
+  if (utc > MAX_SOLAR_UTC) {
+    failRange("solarToLunar", `${year}-${month}-${day} 晚于 2100-12-31，超出农历数据范围`);
+  }
+  return { year, month, day };
+};
+
+/** 某一天的公历节日，包含按规则计算的浮动节日 */
+const solarFestivals = function (
+  y: number,
+  m: number,
+  d: number,
+  sFtv: Record<string, string[]>,
+): string[] {
+  const list = festivalList(sFtv, m, d);
+  const push = function (name: string) {
+    if (list.indexOf(name) === -1) list.push(name);
+  };
+  if (m === 5 && d === nthWeekdayOfMonth(y, 5, 0, 2)) push("母亲节");
+  if (m === 6 && d === nthWeekdayOfMonth(y, 6, 0, 3)) push("父亲节");
+  if (m === 11 && d === nthWeekdayOfMonth(y, 11, 4, 4)) push("感恩节");
+  return list;
+};
+
+/** 某一天的农历节日，除夕按“腊月最后一天”计算，不写死 12-30 */
+const lunarFestivals = function (
+  lYear: number,
+  lMonth: number,
+  lDay: number,
+  lFtv: Record<string, string[]>,
+): string[] {
+  const list = festivalList(lFtv, lMonth, lDay);
+  if (lMonth === 12 && lDay === lMonthDays(lYear, 12) && list.indexOf("除夕") === -1) {
+    list.push("除夕");
+  }
+  return list;
+};
+
+/**
+ * 核心换算，入参必须是已经校验过、且在支持范围内的公历日期
+ */
+const computeLunar = function (sy: number, sm: number, sd: number): LunarResult {
+  const utc = Date.UTC(sy, sm - 1, sd);
+  if (utc < MIN_SOLAR_UTC || utc > MAX_SOLAR_UTC) {
+    failRange("solarToLunar", `${sy}-${sm}-${sd} 超出 1900-01-31 ~ 2100-12-31 的支持范围`);
+  }
+  const config = getResolvedConfig();
+
+  let i: number;
+  let temp = 0;
+  let leap = 0;
+  let isLeap = false;
+  let offset = Math.round((utc - MIN_SOLAR_UTC) / DAY_MS);
+
+  for (i = MIN_YEAR; i < MAX_YEAR + 1 && offset > 0; i++) {
+    temp = lYearDays(i);
+    offset -= temp;
+  }
+  if (offset < 0) {
+    offset += temp;
+    i--;
+  }
+
+  const year = i;
+  leap = leapMonth(year);
+
+  for (i = 1; i < 13 && offset > 0; i++) {
+    if (leap > 0 && i === leap + 1 && !isLeap) {
+      --i;
+      isLeap = true;
+      temp = leapDays(year);
+    } else {
+      temp = lMonthDays(year, i);
+    }
+    if (isLeap && i === leap + 1) isLeap = false;
+    offset -= temp;
+  }
+  if (offset === 0 && leap > 0 && i === leap + 1) {
+    isLeap = !isLeap;
+    if (isLeap) --i;
+  }
+  if (offset < 0) {
+    offset += temp;
+    --i;
+  }
+
+  const month = i;
+  const day = offset + 1;
+
+  const dayOfWeek = new Date(utc).getUTCDay();
+  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+  const firstTermDay = getTerm(sy, sm * 2 - 1);
+  const secondTermDay = getTerm(sy, sm * 2);
+  const lichunDay = getTerm(sy, 3);
+
+  let term: string | null = null;
+  if (firstTermDay === sd) term = getSolarTerm(sm * 2 - 2);
+  if (secondTermDay === sd) term = getSolarTerm(sm * 2 - 1);
+
+  const rest = restOf(config.restIndex, sy, sm, sd);
+  const isBan = rest.isBan;
+  const isXiu = !isBan && (isWeekend || rest.isHoliday);
+
+  const dayCyclical = utc / DAY_MS - (sd - 1) + 25567 + 10;
+  const gzDayOffset = dayCyclical + sd - 1;
+  const ganzhiYear = sm > 2 || (sm === 2 && sd >= lichunDay) ? sy : sy - 1;
+
+  return {
+    Xiu: isXiu,
+    Ban: isBan,
+    Gljr: solarFestivals(sy, sm, sd, config.sFtv),
+    Nljr: lunarFestivals(year, month, day, config.lFtv),
+    lYear: year,
+    lMonth: month,
+    lDay: day,
+    Animal: getAnimal(year),
+    LMonthCn: (isLeap ? "闰" : "") + toChinaMonth(month),
+    LDayCn: toChinaDay(day),
+    cYear: sy,
+    cMonth: sm,
+    cDay: sd,
+    gzYear: toGanZhiYear(ganzhiYear),
+    gzYearLunar: toGanZhiYear(year),
+    gzMonth: toGanZhi((sy - 1900) * 12 + sm + (sd >= firstTermDay ? 12 : 11)),
+    gzDay: toGanZhi(gzDayOffset),
+    gzHour: toHourGanZhi(gzDayOffset),
+    isToday: (function () {
+      const now = new Date();
+      return now.getFullYear() === sy && now.getMonth() + 1 === sm && now.getDate() === sd;
+    })(),
+    isLeap,
+    isWeekend,
+    isWorkday: !isXiu,
+    nWeek: dayOfWeek === 0 ? 7 : dayOfWeek,
+    dayOfWeek,
+    ncWeek: "星期" + toChinaNum(dayOfWeek),
+    Term: term,
+    astro: toAstro(sm, sd),
+  };
+};
+
+/**
+ * 公历转农历
+ *
+ * 不传参返回今天；传参时年、月、日必须同时传入且全部合法，
+ * 越界或非法日期一律抛 RangeError，不会再静默回退到今天或自动进位。
+ *
+ * @param y 公历年（1900-2100）
+ * @param m 公历月（1-12）
+ * @param d 公历日
+ * @throws RangeError 日期非法或超出 1900-01-31 ~ 2100-12-31
+ * @example solarToLunar(2024, 2, 10) // 正月初一
+ */
+const solarToLunar = function (y?: number, m?: number, d?: number): LunarResult {
+  if (y === undefined && m === undefined && d === undefined) {
+    const now = new Date();
+    return computeLunar(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  }
+  if (y === undefined || m === undefined || d === undefined) {
+    failRange(
+      "solarToLunar",
+      `年、月、日必须同时传入，或全部不传以取今天（收到 year=${String(y)}, month=${String(m)}, day=${String(d)}）`,
+    );
+  }
+  const date = validateSolar(y, m, d);
+  return computeLunar(date.year, date.month, date.day);
+};
+
+/**
+ * 农历转公历
+ *
+ * 农历年、月、日非法（含闰月年份不匹配）一律抛 RangeError，
+ * 不再返回 -1 让调用方自己判断。
+ *
+ * @param y 农历年（1900-2100）
+ * @param m 农历月（1-12）
+ * @param d 农历日（1-30）
+ * @param isLeapMonth 是否闰月
+ * @throws RangeError 农历日期非法、闰月不匹配，或换算结果超出 2100-12-31
+ * @example lunarToSolar(2020, 4, 1, true) // 2020-05-23
+ */
+const lunarToSolar = function (
+  y: number,
+  m: number,
+  d: number,
+  isLeapMonth?: boolean,
+): LunarResult {
+  const year = assertInteger("lunarToSolar(year)", y, MIN_YEAR, MAX_YEAR);
+  const month = assertInteger("lunarToSolar(month)", m, 1, 12);
+  const leap = leapMonth(year);
+  const wantLeap = Boolean(isLeapMonth);
+  if (wantLeap && leap !== month) {
+    failRange(
+      "lunarToSolar(isLeapMonth)",
+      `${year} 年${leap === 0 ? "没有闰月" : `的闰月是闰${leap}月`}，不能按闰${month}月换算`,
+    );
+  }
+  const maxDay = wantLeap ? leapDays(year) : lMonthDays(year, month);
+  const day = assertInteger("lunarToSolar(day)", d, 1, maxDay);
+
+  let offset = 0;
+  for (let i = MIN_YEAR; i < year; i++) offset += lYearDays(i);
+  let leapAdded = false;
+  for (let i = 1; i < month; i++) {
+    if (!leapAdded && leap > 0 && leap <= i) {
+      offset += leapDays(year);
+      leapAdded = true;
+    }
+    offset += lMonthDays(year, i);
+  }
+  if (wantLeap) offset += lMonthDays(year, month);
+
+  const utc = MIN_SOLAR_UTC + (offset + day - 1) * DAY_MS;
+  if (utc > MAX_SOLAR_UTC) {
+    failRange("lunarToSolar", `农历 ${year}-${month}-${day} 换算后晚于 2100-12-31，超出支持范围`);
+  }
+  const date = new Date(utc);
+  return computeLunar(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+};
+
+const calendar = {
+  /** 注入自定义节日与调休数据，默认与内置数据合并去重 */
+  setHolidays,
+  /** 恢复到内置数据 */
+  resetHolidays,
+  /** 取当前生效的节假日配置（深拷贝） */
+  getHolidays,
+  solarToLunar,
+  lunarToSolar,
+  utils: {
+    lYearDays,
+    leapMonth,
+    leapDays,
+    lMonthDays,
+    toChinaMonth,
+    toChinaDay,
+    toChinaNum,
+    solarDays,
+    solarFirstWeek,
+    nthWeekdayOfMonth,
+    toAstro,
+    getAnimal,
+    getTerm,
+    getSolarTerm,
+    toGanZhi,
+    toGanZhiYear,
+    toHourGanZhi,
+  },
+};
+
+export { solarToLunar, lunarToSolar, setHolidays, resetHolidays, getHolidays };
+export default calendar;
