@@ -1,0 +1,19 @@
+{
+  "name": "calendar-ui",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "typecheck": "bun check"
+  },
+  "dependencies": {
+    "calendar": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}
