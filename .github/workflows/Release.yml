@@ -1,8 +1,8 @@
 name: Release
 
 # 版本号由人工修改（packages/calendar/package.json 的 version）。
-# 这里只在 package.json 变动时触发，并对比 npm 上已发布的版本：
-# 版本没变就跳过，只有版本不一样才真正构建并发布。
+# 触发：package.json 有改动，或手动 Run workflow。
+# 真正发布前用 `vp view` 对比 npm 上的版本，版本没变就跳过。
 on:
   push:
     branches:
@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: write
-  id-token: write
 
 concurrency:
   group: release-calendar
@@ -28,25 +27,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      # 装 vp / Node / bun 并执行 vp install；registry-url 会在 $RUNNER_TEMP 写 .npmrc
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1.22.0
         with:
-          bun-version: 1.4.4
+          node-version: "24"
+          cache: true
+          registry-url: https://registry.npmjs.org
+          scope: "@sanguogege"
 
       - name: Detect version change
         id: version
-        shell: bash
         run: |
           set -euo pipefail
           current=$(node -p "require('./packages/calendar/package.json').version")
-          published=$(npm view "@sanguogege/calendar" version 2>/dev/null | tail -n 1 || true)
+          published=$(vp view @sanguogege/calendar version 2>/dev/null | tail -n 1 || true)
 
-          echo "package.json: ${current}"
+          echo "package.json: $current"
           echo "npm:          ${published:-<未发布>}"
 
           {
-            echo "version=${current}"
-            if [ "${published}" = "${current}" ]; then
+            echo "version=$current"
+            if [ "$published" = "$current" ]; then
               echo "changed=false"
             else
               echo "changed=true"
@@ -59,22 +61,18 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: echo "::notice::版本 ${VERSION} 已发布到 npm，跳过。"
 
-      - name: Install dependencies
-        if: steps.version.outputs.changed == 'true'
-        run: bun install
-
       # 等价于 vp check && vp run -r test && vp run -r build
       - name: Check, test and build
         if: steps.version.outputs.changed == 'true'
-        run: bun run ready
+        run: vp run ready
 
       - name: Publish to npm
         if: steps.version.outputs.changed == 'true'
         working-directory: packages/calendar
-        run: npm publish --access public
+        run: vp pm publish
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Tag and create GitHub release
         if: steps.version.outputs.changed == 'true'
@@ -83,7 +81,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
-          tag="v${VERSION}"
+          tag="@sanguogege/calendar@${VERSION}"
           if git rev-parse --verify --quiet "refs/tags/${tag}" > /dev/null; then
             echo "tag ${tag} 已存在，跳过创建"
           else
