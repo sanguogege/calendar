@@ -1,6 +1,11 @@
 export { createCalendar } from "./calendar";
-export type { CalendarDay, CalendarInstance, CalendarOptions } from "./types";
-
-export function add(a: number, b: number): number {
-  return a + b;
-}
+export { enUS, locales, resolveLocale, zhCN } from "./locales";
+export type {
+  CalendarDay,
+  CalendarInstance,
+  CalendarLocale,
+  CalendarLocaleName,
+  CalendarOptions,
+  HeaderRenderContext,
+  HeaderRenderer,
+} from "./types";

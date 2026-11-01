@@ -139,6 +139,12 @@
   opacity: 0.85;
 }
 
+/* 隐藏状态：类选择器里的 display 会盖掉 [hidden] 的默认样式，这里显式补上 */
+.cui[hidden],
+.cui__header[hidden] {
+  display: none;
+}
+
 @media (prefers-color-scheme: dark) {
   .cui {
     --cui-bg: #161b22;
